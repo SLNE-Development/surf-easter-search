@@ -2,18 +2,18 @@ package dev.slne.surf.surfeastersearch.config;
 
 import dev.slne.surf.surfeastersearch.config.items.ItemsConfigManager;
 import dev.slne.surf.surfeastersearch.config.players.PlayerConfigManager;
-import dev.slne.surf.surfeastersearch.config.players.PlayerConfigManager.PlayerData;
+import dev.slne.surf.surfeastersearch.config.players.PlayerData;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class EasterConfigManager {
+public class EasterConfigManager implements ConfigManager{
 
   private static final ComponentLogger LOGGER = ComponentLogger.logger("EasterConfigManager");
   public static final EasterConfigManager INSTANCE = new EasterConfigManager();
@@ -38,14 +38,16 @@ public class EasterConfigManager {
     this.random = tempRandom;
   }
 
-  public void readConfig(FileConfiguration config) {
-    itemsConfigManager.readConfig(config.getConfigurationSection("items"));
-    playerConfigManager.readConfig(config.getConfigurationSection("players"));
+  @Override
+  public void readConfig(@NotNull ConfigurationSection config) {
+    itemsConfigManager.readConfig(getOrCreateSection(config,"items"));
+    playerConfigManager.readConfig(getOrCreateSection(config, "players"));
 
     this.eggIdCounter = config.getInt("egg-id-counter", 0);
   }
 
-  public void writeConfig(FileConfiguration config) {
+  @Override
+  public void writeConfig(@NotNull ConfigurationSection config) {
     itemsConfigManager.writeConfig(config.createSection("items"));
     playerConfigManager.writeConfig(config.createSection("players"));
 

@@ -1,22 +1,22 @@
-egg-id-counter: 0
+#egg-id-counter: 0
 
-items:
-  packs:
-    1:
-      - some item
-      - another item
-      - yet another item
-    2:
-      - some item
-      - another item
-      - yet another item
+#items:
+#  packs:
+#    1:
+#      - some item
+#      - another item
+#      - yet another item
+#    2:
+#      - some item
+#      - another item
+#      - yet another item
 
-players:
-  uuid:
-    today-collected: 0
-    eggs-collected:
-      - 1
-      - 2
-    packs-collected:
-      - 1
-      - 2
+#players:
+#  uuid:
+#    today-collected: 0
+#    eggs-collected:
+#      - 1
+#      - 2
+#    packs-collected:
+#      - 1
+#      - 2

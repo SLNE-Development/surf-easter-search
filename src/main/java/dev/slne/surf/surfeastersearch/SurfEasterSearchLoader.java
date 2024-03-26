@@ -43,13 +43,15 @@ public class SurfEasterSearchLoader implements PluginLoader {
 
   private record PluginLibraries(Map<String, String> repositories, List<String> dependencies) {
     public Stream<Dependency> asDependencies() {
-      return dependencies.stream()
-          .map(d -> new Dependency(new DefaultArtifact(d), null));
+      return dependencies != null ? dependencies.stream()
+          .map(d -> new Dependency(new DefaultArtifact(d), null))
+          : Stream.empty();
     }
 
     public Stream<RemoteRepository> asRepositories() {
-      return repositories.entrySet().stream()
-          .map(e -> new RemoteRepository.Builder(e.getKey(), "default", e.getValue()).build());
+      return repositories != null ? repositories.entrySet().stream()
+          .map(e -> new RemoteRepository.Builder(e.getKey(), "default", e.getValue()).build())
+          : Stream.empty();
     }
   }
 }

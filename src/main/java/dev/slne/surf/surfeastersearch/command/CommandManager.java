@@ -8,6 +8,6 @@ public class CommandManager {
   }
 
   public void registerCommands() {
-
+    new EasterCommand().register();
   }
 }

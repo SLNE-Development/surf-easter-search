@@ -1,14 +1,20 @@
 package dev.slne.surf.surfeastersearch.listener;
 
 import dev.slne.surf.surfeastersearch.SurfEasterSearch;
+import dev.slne.surf.surfeastersearch.listener.player.PlayerInteractListener;
 import dev.slne.surf.surfeastersearch.listener.save.WorldSaveListener;
+import io.papermc.paper.util.Tick;
+import java.time.ZonedDateTime;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
+import org.jetbrains.annotations.Contract;
 
 public final class ListenerManager {
+
   public static final ListenerManager INSTANCE = new ListenerManager();
 
+  @Contract(pure = true)
   private ListenerManager() {
   }
 
@@ -17,6 +23,15 @@ public final class ListenerManager {
     final PluginManager pm = Bukkit.getPluginManager();
 
     pm.registerEvents(WorldSaveListener.INSTANCE, plugin);
+
+    if (SurfEasterSearch.START_DATE.isBefore(ZonedDateTime.now())) {
+      Bukkit.getScheduler()
+          .runTaskLater(plugin, () -> pm.registerEvents(PlayerInteractListener.INSTANCE, plugin),
+              ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick()));
+    } else {
+      pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
+    }
+
   }
 
   public void unregisterListeners() {

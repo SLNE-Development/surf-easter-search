@@ -31,6 +31,7 @@ public final class EasterEggFactory {
 
   public static void makeEgg(@NotNull TileState tileState) {
     makeEgg(tileState.getPersistentDataContainer());
+    tileState.update();
   }
 
   public static void makeEgg(@NotNull PersistentDataContainer pdc) {

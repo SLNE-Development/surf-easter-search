@@ -2,7 +2,7 @@ package dev.slne.surf.surfeastersearch.listener.player;
 
 import dev.slne.surf.surfeastersearch.config.EasterConfigManager;
 import dev.slne.surf.surfeastersearch.config.items.pack.PacksConfigManager;
-import dev.slne.surf.surfeastersearch.config.players.PlayerConfigManager.PlayerData;
+import dev.slne.surf.surfeastersearch.config.players.PlayerData;
 import dev.slne.surf.surfeastersearch.eggs.EasterEggFactory;
 import dev.slne.surf.surfeastersearch.messages.MessageBundle;
 import java.util.List;

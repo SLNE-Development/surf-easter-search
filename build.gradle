@@ -1,8 +1,9 @@
-import net.minecrell.pluginyml.bukkit.BukkitPluginDescription;
+import xyz.jpenilla.runtask.pluginsapi.DownloadPluginsSpec
 
 plugins {
     id 'java'
     id 'net.minecrell.plugin-yml.paper' version '0.6.0'
+    id 'xyz.jpenilla.run-paper' version '2.2.3'
 }
 
 group = 'dev.slne.surf'
@@ -38,7 +39,7 @@ paper {
     bootstrapper = 'dev.slne.surf.surfeastersearch.SurfEasterSearchBootstrap'
     loader = 'dev.slne.surf.surfeastersearch.SurfEasterSearchLoader'
     apiVersion = '1.20'
-    generateLibrariesJson = true
+//    generateLibrariesJson = true
 
     authors = ['twisti']
 
@@ -66,6 +67,15 @@ tasks.withType(JavaCompile).configureEach {
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
+    }
+}
+
+tasks {
+    runServer {
+        minecraftVersion '1.20.4'
+        downloadPlugins(({
+            it.modrinth('commandapi', '9.3.0')
+        } as Action<DownloadPluginsSpec>))
     }
 }
 
