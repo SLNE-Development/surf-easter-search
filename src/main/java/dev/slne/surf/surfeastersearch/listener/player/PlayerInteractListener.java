@@ -15,6 +15,7 @@ import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
@@ -40,9 +41,15 @@ public final class PlayerInteractListener implements Listener {
       return;
     }
 
+    if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+      return;
+    }
+
     if (!EasterEggFactory.isEgg(tileState)) {
       return;
     }
+
+    event.setCancelled(true);
 
     final Player player = event.getPlayer();
     final int eggId = EasterEggFactory.getEggId(tileState);
