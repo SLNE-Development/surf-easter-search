@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SurfEasterSearch extends JavaPlugin {
 
-  public static final ZonedDateTime START_DATE = ZonedDateTime.of(2024, 3, 31, 0, 0, 0, 0,
+  public static final ZonedDateTime START_DATE = ZonedDateTime.of(2024, 3, 29, 0, 0, 0, 0,
       ZonedDateTime.now().getZone());
 
   public SurfEasterSearch() {
