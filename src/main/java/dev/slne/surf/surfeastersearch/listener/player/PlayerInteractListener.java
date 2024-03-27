@@ -1,13 +1,18 @@
 package dev.slne.surf.surfeastersearch.listener.player;
 
+import dev.slne.surf.surfeastersearch.SurfEasterSearch;
 import dev.slne.surf.surfeastersearch.config.EasterConfigManager;
 import dev.slne.surf.surfeastersearch.config.items.pack.PacksConfigManager;
 import dev.slne.surf.surfeastersearch.config.players.PlayerData;
 import dev.slne.surf.surfeastersearch.eggs.EasterEggFactory;
 import dev.slne.surf.surfeastersearch.messages.MessageBundle;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.objects.ObjectSets;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -24,9 +29,11 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerInteractListener implements Listener {
 
   public static final PlayerInteractListener INSTANCE = new PlayerInteractListener();
+  private final ObjectSet<UUID> processingPlayers;
 
   @Contract(pure = true)
   private PlayerInteractListener() {
+    this.processingPlayers = ObjectSets.synchronize(new ObjectOpenHashSet<>());
   }
 
   @EventHandler
@@ -52,17 +59,25 @@ public final class PlayerInteractListener implements Listener {
     event.setCancelled(true);
 
     final Player player = event.getPlayer();
+    final UUID uuid = player.getUniqueId();
+
+    if (!processingPlayers.add(uuid)) {
+      return;
+    }
+
     final int eggId = EasterEggFactory.getEggId(tileState);
     final PlayerData playerData = EasterConfigManager.INSTANCE.getPlayerConfigManager()
         .getPlayerData(player.getUniqueId());
 
     if (playerData.hasCollectedEggId(eggId)) {
       player.sendMessage(MessageBundle.getEggAlreadyCollected());
+      removePlayerFromProcessingList(uuid);
       return;
     }
 
     if (!EasterConfigManager.INSTANCE.getPlayerConfigManager().canCollectToday(player)) {
       player.sendMessage(MessageBundle.getDailyLimitReached());
+      removePlayerFromProcessingList(uuid);
       return;
     }
 
@@ -70,10 +85,17 @@ public final class PlayerInteractListener implements Listener {
 
     if (packId == -1) {
       player.sendMessage(MessageBundle.getAllPacksCollected());
+      removePlayerFromProcessingList(uuid);
       return;
     }
 
     collectPack(player, packId, eggId);
+    removePlayerFromProcessingList(uuid);
+  }
+
+  private void removePlayerFromProcessingList(UUID uuid) {
+    Bukkit.getScheduler()
+        .runTaskLater(SurfEasterSearch.getInstance(), () -> processingPlayers.remove(uuid), 5L);
   }
 
   private void collectPack(@NotNull Player player, int packId, int eggId) {

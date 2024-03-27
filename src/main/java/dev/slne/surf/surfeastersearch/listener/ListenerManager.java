@@ -24,7 +24,7 @@ public final class ListenerManager {
 
     pm.registerEvents(WorldSaveListener.INSTANCE, plugin);
 
-    if (SurfEasterSearch.START_DATE.isBefore(ZonedDateTime.now())) {
+    if (ZonedDateTime.now().isBefore(SurfEasterSearch.START_DATE)) {
       Bukkit.getScheduler()
           .runTaskLater(plugin, () -> pm.registerEvents(PlayerInteractListener.INSTANCE, plugin),
               ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick()));
