@@ -9,6 +9,8 @@ import dev.slne.surf.surfeastersearch.messages.MessageBundle;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -57,6 +59,11 @@ public final class PlayerInteractListener implements Listener {
     }
 
     event.setCancelled(true);
+
+    if (ZonedDateTime.now().isAfter(SurfEasterSearch.END_DATE)) {
+        event.getPlayer().sendMessage(MessageBundle.getEventEnded());
+      return;
+    }
 
     final Player player = event.getPlayer();
     final UUID uuid = player.getUniqueId();

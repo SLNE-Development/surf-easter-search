@@ -1,7 +1,6 @@
 package dev.slne.surf.surfeastersearch.messages;
 
 import java.util.List;
-import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -60,6 +59,11 @@ public class MessageBundle implements Colors {
   public static Component getNoItemInHand() {
     return PREFIX
         .append(Component.text("Du hältst kein Item in der Hand.", ERROR));
+  }
+
+  public static Component getEventEnded() {
+    return PREFIX
+            .append(Component.text("Du hast das Event leider verpasst!", ERROR));
   }
 
   public static Component getPackItemAdded(int packId, ItemStack item) {

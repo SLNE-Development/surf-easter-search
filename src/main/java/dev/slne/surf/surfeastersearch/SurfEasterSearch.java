@@ -17,6 +17,8 @@ public final class SurfEasterSearch extends JavaPlugin {
 
   public static final ZonedDateTime START_DATE = ZonedDateTime.of(2024, 3, 29, 0, 0, 0, 0,
       ZonedDateTime.now().getZone());
+  public static final ZonedDateTime END_DATE = ZonedDateTime.of(2024, 4, 2, 0, 0, 0, 0,
+          ZonedDateTime.now().getZone());
 
   public SurfEasterSearch() {
   }
