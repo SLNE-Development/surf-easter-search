@@ -6,6 +6,7 @@ import dev.slne.surf.surfeastersearch.config.players.PlayerData;
 import dev.slne.surf.surfeastersearch.listener.ListenerManager;
 import io.papermc.paper.util.Tick;
 import java.time.Duration;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import net.kyori.adventure.util.Ticks;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -15,56 +16,86 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SurfEasterSearch extends JavaPlugin {
 
-  public static final ZonedDateTime START_DATE = ZonedDateTime.of(2024, 3, 29, 0, 0, 0, 0,
-      ZonedDateTime.now().getZone());
-  public static final ZonedDateTime END_DATE = ZonedDateTime.of(2024, 4, 2, 0, 0, 0, 0,
-          ZonedDateTime.now().getZone());
+    public static final ZonedDateTime START_DATE;
+    public static final ZonedDateTime END_DATE;
 
-  public SurfEasterSearch() {
-  }
+    static {
+        // current year
+        int year = ZonedDateTime.now().getYear();
+        // calculate eastersunday
+        ZonedDateTime easterSunday = getEasterSunday(year);
 
-  @Override
-  public void onLoad() {
-    ConfigurationSerialization.registerClass(PlayerData.class);
-    saveDefaultConfig();
-    saveConfig();
+        ZoneId zone = ZonedDateTime.now().getZone();
 
-    EasterConfigManager.INSTANCE.readConfig(getConfig());
-  }
+        // Karfreitag = 2 days before eastersunday
+        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
 
-  @Contract(pure = true)
-  @Override
-  public void onEnable() {
-    ListenerManager.INSTANCE.registerListeners();
+        // Ostermontag = 1 day after eastersunday
+        END_DATE = easterSunday.plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
+    }
 
-    final ZonedDateTime now = ZonedDateTime.now();
-    final ZonedDateTime nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
-    final long delay = now.until(nextRun, Tick.tick());
+    public SurfEasterSearch() {}
 
-    getServer().getScheduler().scheduleSyncRepeatingTask(
-        this,
-        () -> EasterConfigManager.INSTANCE.getPlayerConfigManager().resetDailyLimits(),
-        delay,
-        Duration.ofDays(1).toMillis() / Ticks.SINGLE_TICK_DURATION_MS
-    );
+    @Override
+    public void onLoad() {
+        ConfigurationSerialization.registerClass(PlayerData.class);
+        saveDefaultConfig();
+        saveConfig();
+        EasterConfigManager.INSTANCE.readConfig(getConfig());
+    }
 
-    CommandManager.INSTANCE.registerCommands();
-  }
+    @Override
+    public void onEnable() {
+        ListenerManager.INSTANCE.registerListeners();
 
-  @Contract(pure = true)
-  @Override
-  public void onDisable() {
-    saveEasterConfig();
+        final ZonedDateTime now = ZonedDateTime.now();
+        final ZonedDateTime nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
+        final long delay = now.until(nextRun, Tick.tick());
 
-    ListenerManager.INSTANCE.unregisterListeners();
-  }
+        getServer().getScheduler().scheduleSyncRepeatingTask(
+                this,
+                () -> EasterConfigManager.INSTANCE.getPlayerConfigManager().resetDailyLimits(),
+                delay,
+                Duration.ofDays(1).toMillis() / Ticks.SINGLE_TICK_DURATION_MS
+        );
 
-  public void saveEasterConfig() {
-    EasterConfigManager.INSTANCE.writeConfig(getConfig());
-    saveConfig();
-  }
+        CommandManager.INSTANCE.registerCommands();
+    }
 
-  public static @NotNull SurfEasterSearch getInstance() {
-    return getPlugin(SurfEasterSearch.class);
-  }
+    @Override
+    public void onDisable() {
+        saveEasterConfig();
+        ListenerManager.INSTANCE.unregisterListeners();
+    }
+
+    public void saveEasterConfig() {
+        EasterConfigManager.INSTANCE.writeConfig(getConfig());
+        saveConfig();
+    }
+
+    public static @NotNull SurfEasterSearch getInstance() {
+        return getPlugin(SurfEasterSearch.class);
+    }
+
+    /**
+     * Calculates Easter Sunday for a given year (according to the Meeus/Jones/Butcher algorithm).
+     */
+    private static ZonedDateTime getEasterSunday(int year) {
+        int a = year % 19;
+        int b = year / 100;
+        int c = year % 100;
+        int d = b / 4;
+        int e = b % 4;
+        int f = (b + 8) / 25;
+        int g = (b - f + 1) / 3;
+        int h = (19 * a + b - d - g + 15) % 30;
+        int i = c / 4;
+        int k = c % 4;
+        int l = (32 + 2 * e + 2 * i - h - k) % 7;
+        int m = (a + 11 * h + 22 * l) / 451;
+        int month = (h + l - 7 * m + 114) / 31;
+        int day = ((h + l - 7 * m + 114) % 31) + 1;
+
+        return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, ZonedDateTime.now().getZone());
+    }
 }
