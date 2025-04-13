@@ -1,7 +1,10 @@
 package dev.slne.surf.surfeastersearch.messages;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
+import dev.slne.surf.surfeastersearch.SurfEasterSearch;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.Location;
@@ -60,13 +63,13 @@ public class MessageBundle implements Colors {
         int z = eggLocation.getBlockZ();
 
         return PREFIX
-                .append(Component.text("Du hast erfolgreich ein Ei bei ", SUCCESS)
-                        .append(Component.text(x + ", " + y + ", " + z, INFO)
-                                .append(Component.text(" in der Welt ", SUCCESS)
-                                        .append(Component.text(worldName, INFO)
-                                                .append(Component.text(" erstellt!", SUCCESS)
-                                                )))));
+                .append(Component.text("Du hast erfolgreich ein Ei bei ", SUCCESS))
+                .append(Component.text("X: " + x + ", Y: " + y + ", Z: " + z, VARIABLE_VALUE))
+                .append(Component.text(" in der Welt ", SUCCESS))
+                .append(Component.text(worldName, VARIABLE_VALUE))
+                .append(Component.text(" erstellt!", SUCCESS));
     }
+
 
     public static Component getNoItemInHand() {
         return PREFIX
@@ -84,5 +87,22 @@ public class MessageBundle implements Colors {
                 .append(Component.text(packId, VARIABLE_VALUE))
                 .append(Component.text(": ", SUCCESS))
                 .append(item.displayName());
+    }
+
+    public static Component getEasterPeriod() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm").withLocale(Locale.GERMAN);
+
+        String formattedStart = SurfEasterSearch.START_DATE.format(formatter);
+        String formattedEnd = SurfEasterSearch.END_DATE.format(formatter);
+        String zoneName = SurfEasterSearch.START_DATE.getZone().toString(); // z. B. "Europe/Berlin"
+
+        return PREFIX
+                .append(Component.text("Der Osterzeitraum ist vom ", PRIMARY))
+                .append(Component.text(formattedStart, VARIABLE_VALUE))
+                .append(Component.text(" bis zum ", PRIMARY))
+                .append(Component.text(formattedEnd, VARIABLE_VALUE))
+                .append(Component.text(" (Zeitzone: ", PRIMARY))
+                .append(Component.text(zoneName, VARIABLE_VALUE))
+                .append(Component.text(").", PRIMARY));
     }
 }
