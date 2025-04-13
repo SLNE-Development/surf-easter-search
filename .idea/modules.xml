@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dev.slne.surf.surf-easter-search.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dev.slne.surf.surf-easter-search.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/surf-easter-search.iml" filepath="$PROJECT_DIR$/.idea/modules/surf-easter-search.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/surf-easter-search.main.iml" filepath="$PROJECT_DIR$/.idea/modules/surf-easter-search.main.iml" />
     </modules>
   </component>

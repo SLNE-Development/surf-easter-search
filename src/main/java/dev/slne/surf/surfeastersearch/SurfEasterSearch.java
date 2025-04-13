@@ -3,15 +3,16 @@ package dev.slne.surf.surfeastersearch;
 import dev.slne.surf.surfeastersearch.command.CommandManager;
 import dev.slne.surf.surfeastersearch.config.EasterConfigManager;
 import dev.slne.surf.surfeastersearch.config.players.PlayerData;
+import dev.slne.surf.surfeastersearch.config.players.PlayerDataManager;
 import dev.slne.surf.surfeastersearch.listener.ListenerManager;
 import io.papermc.paper.util.Tick;
-import java.time.Duration;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import net.kyori.adventure.util.Ticks;
+import java.util.concurrent.TimeUnit;
+
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class SurfEasterSearch extends JavaPlugin {
@@ -28,13 +29,15 @@ public final class SurfEasterSearch extends JavaPlugin {
         ZoneId zone = ZonedDateTime.now().getZone();
 
         // Karfreitag = 2 days before eastersunday
-        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
+//        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
+        START_DATE = ZonedDateTime.now();
 
         // Ostermontag = 1 day after eastersunday
         END_DATE = easterSunday.plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
     }
 
-    public SurfEasterSearch() {}
+    public SurfEasterSearch() {
+    }
 
     @Override
     public void onLoad() {
@@ -52,11 +55,15 @@ public final class SurfEasterSearch extends JavaPlugin {
         final ZonedDateTime nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
         final long delay = now.until(nextRun, Tick.tick());
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(
+
+        getServer().getAsyncScheduler().runAtFixedRate(
                 this,
-                () -> EasterConfigManager.INSTANCE.getPlayerConfigManager().resetDailyLimits(),
+                task -> {
+                    PlayerDataManager.resetDailyLimits();
+                },
                 delay,
-                Duration.ofDays(1).toMillis() / Ticks.SINGLE_TICK_DURATION_MS
+                1,
+                TimeUnit.DAYS
         );
 
         CommandManager.INSTANCE.registerCommands();

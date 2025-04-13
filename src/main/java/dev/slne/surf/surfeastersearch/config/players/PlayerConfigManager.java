@@ -32,23 +32,22 @@ public class PlayerConfigManager implements ConfigManager {
       config.set(entry.getKey().toString(), entry.getValue());
     }
   }
-
-  public boolean canCollectToday(@NotNull Player player) {
-    final PlayerData playerData = playerDataMap.get(player.getUniqueId());
-    final int todayCollected = playerData.getAndIncrementTodayCollected();
-
-    return todayCollected < MAX_COLLECT_PER_DAY;
-  }
-
+//
+//  public boolean canCollectToday(@NotNull Player player) {
+//    final PlayerData playerData = playerDataMap.get(player.getUniqueId());
+//    final int todayCollected = playerData.getAndIncrementTodayCollected();
+//
+//    return todayCollected < MAX_COLLECT_PER_DAY;
+//  }
   public PlayerData getPlayerData(@NotNull UUID uuid) {
     return playerDataMap.computeIfAbsent(uuid, __ -> new PlayerData());
   }
 
-  public void resetDailyLimits() {
-    for (PlayerData playerData : playerDataMap.values()) {
-      playerData.resetTodayCollected();
-    }
-
-    SurfEasterSearch.getInstance().saveEasterConfig();
-  }
+//  public void resetDailyLimits() {
+//    for (PlayerData playerData : playerDataMap.values()) {
+//      playerData.resetTodayCollected();
+//    }
+//
+//    SurfEasterSearch.getInstance().saveEasterConfig();
+//  }
 }
