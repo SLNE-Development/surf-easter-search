@@ -29,8 +29,8 @@ public final class SurfEasterSearch extends JavaPlugin {
         ZoneId zone = ZonedDateTime.now().getZone();
 
         // Karfreitag = 2 days before eastersunday
-//        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
-        START_DATE = ZonedDateTime.now();
+        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
+        // START_DATE = ZonedDateTime.now(); //DEBUG
 
         // Ostermontag = 1 day after eastersunday
         END_DATE = easterSunday.plusDays(1).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
