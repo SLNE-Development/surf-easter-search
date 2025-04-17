@@ -2,8 +2,7 @@ package dev.slne.surf.surfeastersearch.command;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.slne.surf.surfeastersearch.command.debug.EasterPeriodDebug;
-import dev.slne.surf.surfeastersearch.command.egg.EggCommand;
-import dev.slne.surf.surfeastersearch.command.limit.ResetDailyLimitCommand;
+import dev.slne.surf.surfeastersearch.command.egg.CreateEggCommand;
 import dev.slne.surf.surfeastersearch.command.pack.PackCommand;
 
 public class EasterCommand extends CommandAPICommand {
@@ -15,9 +14,8 @@ public class EasterCommand extends CommandAPICommand {
     withAliases("ostern");
 
     withSubcommands(
-        new EggCommand("egg"),
+        new CreateEggCommand("createegg"),
         new PackCommand("pack"),
-        new ResetDailyLimitCommand("resetdailylimit"),
         new EasterPeriodDebug("easterperiod")
     );
 

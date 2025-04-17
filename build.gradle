@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'dev.slne.surf'
-version = '1.0.0-SNAPSHOT'
+version = '2.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -29,16 +29,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT"
+    compileOnly "io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT"
 
-    compileOnly "dev.jorel:commandapi-bukkit-core:9.3.0"
+    compileOnly "dev.jorel:commandapi-bukkit-core:10.0.0"
 }
 
 paper {
     main = 'dev.slne.surf.surfeastersearch.SurfEasterSearch'
     bootstrapper = 'dev.slne.surf.surfeastersearch.SurfEasterSearchBootstrap'
     loader = 'dev.slne.surf.surfeastersearch.SurfEasterSearchLoader'
-    apiVersion = '1.20'
+    apiVersion = '1.21'
 //    generateLibrariesJson = true
 
     authors = ['twisti']
@@ -52,7 +52,7 @@ paper {
     }
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -72,9 +72,9 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks {
     runServer {
-        minecraftVersion '1.20.4'
+        minecraftVersion '1.21.4'
         downloadPlugins(({
-            it.modrinth('commandapi', '9.3.0')
+            it.modrinth('commandapi', '10.0.0')
         } as Action<DownloadPluginsSpec>))
     }
 }

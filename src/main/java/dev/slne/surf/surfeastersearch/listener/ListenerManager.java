@@ -2,9 +2,12 @@ package dev.slne.surf.surfeastersearch.listener;
 
 import dev.slne.surf.surfeastersearch.SurfEasterSearch;
 import dev.slne.surf.surfeastersearch.listener.player.PlayerInteractListener;
+import dev.slne.surf.surfeastersearch.listener.player.PlayerResetDailyLimitsOnJoinListener;
 import dev.slne.surf.surfeastersearch.listener.save.WorldSaveListener;
 import io.papermc.paper.util.Tick;
+
 import java.time.ZonedDateTime;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -12,29 +15,31 @@ import org.jetbrains.annotations.Contract;
 
 public final class ListenerManager {
 
-  public static final ListenerManager INSTANCE = new ListenerManager();
+    public static final ListenerManager INSTANCE = new ListenerManager();
 
-  @Contract(pure = true)
-  private ListenerManager() {
-  }
-
-  public void registerListeners() {
-    final SurfEasterSearch plugin = SurfEasterSearch.getInstance();
-    final PluginManager pm = Bukkit.getPluginManager();
-
-    pm.registerEvents(WorldSaveListener.INSTANCE, plugin);
-
-    if (ZonedDateTime.now().isBefore(SurfEasterSearch.START_DATE)) {
-      Bukkit.getScheduler()
-          .runTaskLater(plugin, () -> pm.registerEvents(PlayerInteractListener.INSTANCE, plugin),
-              ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick()));
-    } else {
-      pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
+    @Contract(pure = true)
+    private ListenerManager() {
     }
 
-  }
+    public void registerListeners() {
+        final SurfEasterSearch plugin = SurfEasterSearch.getInstance();
+        final PluginManager pm = Bukkit.getPluginManager();
 
-  public void unregisterListeners() {
-    HandlerList.unregisterAll(SurfEasterSearch.getInstance());
-  }
+        pm.registerEvents(WorldSaveListener.INSTANCE, plugin);
+
+        if (ZonedDateTime.now().isBefore(SurfEasterSearch.START_DATE)) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
+                pm.registerEvents(PlayerResetDailyLimitsOnJoinListener.INSTANCE, plugin);
+            }, ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick()));
+        } else {
+            pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
+            pm.registerEvents(PlayerResetDailyLimitsOnJoinListener.INSTANCE, plugin);
+        }
+
+    }
+
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(SurfEasterSearch.getInstance());
+    }
 }

@@ -8,9 +8,9 @@ import dev.slne.surf.surfeastersearch.messages.MessageBundle;
 import org.bukkit.Location;
 import org.bukkit.block.TileState;
 
-public class EggCommand extends CommandAPICommand {
+public class CreateEggCommand extends CommandAPICommand {
 
-  public EggCommand(String commandName) {
+  public CreateEggCommand(String commandName) {
     super(commandName);
 
     withArguments(new LocationArgument("eggLocation", LocationType.BLOCK_POSITION));
@@ -31,7 +31,7 @@ public class EggCommand extends CommandAPICommand {
       }
 
       EasterEggFactory.makeEgg(tileState);
-      sender.sendMessage(MessageBundle.getEggMade());
+      sender.sendMessage(MessageBundle.getEggMade(eggLocation));
     });
   }
 }
