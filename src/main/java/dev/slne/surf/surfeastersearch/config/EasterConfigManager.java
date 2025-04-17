@@ -87,4 +87,8 @@ public class EasterConfigManager implements ConfigManager{
   public PlayerConfigManager getPlayerConfigManager() {
     return playerConfigManager;
   }
+
+  public SecureRandom getRandom() {
+    return random;
+  }
 }

@@ -88,7 +88,8 @@ public final class PlayerInteractListener implements Listener {
             return;
         }
 
-        final int packId = EasterConfigManager.INSTANCE.getRandomUnCollectedPackId(player);
+
+        final int packId = PlayerDataManager.getRandomUnCollectedPackId(player);
 
         if (packId == -1) {
             player.sendMessage(MessageBundle.getAllPacksCollected());
