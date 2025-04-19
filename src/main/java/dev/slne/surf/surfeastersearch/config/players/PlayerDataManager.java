@@ -4,6 +4,8 @@ import dev.slne.surf.surfeastersearch.SurfEasterSearch;
 import dev.slne.surf.surfeastersearch.config.EasterConfigManager;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -12,6 +14,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerDataManager {
+
+  private static final Logger logger = SurfEasterSearch.getInstance().getLogger();
 
   private static final NamespacedKey COLLECTED_PACKS_KEY = new NamespacedKey(
       SurfEasterSearch.getInstance(), "collected-packs");
@@ -93,17 +97,16 @@ public class PlayerDataManager {
     PersistentDataContainer container = player.getPersistentDataContainer();
 
     long lastReset = container.getOrDefault(LAST_RESET_TIMESTAMP, PersistentDataType.LONG, 0L);
-    if (lastReset == 0L) {
-      return;
-    }
-
     long currentTime = System.currentTimeMillis();
     long millisInDay = 24 * 60 * 60 * 1000;
 
     // Prüfen, ob mindestens ein voller Tag vergangen ist
     if (currentTime - lastReset < millisInDay) {
+      logger.log(Level.INFO, "Daily egg limits not reset for player: " + player.getName());
       return;
     }
+
+    logger.log(Level.INFO, "Resetting daily egg limits for player: " + player.getName());
 
     container.set(TODAY_COLLECTED_EGGS, PersistentDataType.INTEGER, 0);
     container.set(LAST_RESET_TIMESTAMP, PersistentDataType.LONG, System.currentTimeMillis());

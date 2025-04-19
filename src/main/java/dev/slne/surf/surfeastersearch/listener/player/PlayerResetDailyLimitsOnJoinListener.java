@@ -19,10 +19,10 @@ public class PlayerResetDailyLimitsOnJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        player.getScheduler().run(SurfEasterSearch.getInstance(), (task) -> {
+        player.getScheduler().runDelayed(SurfEasterSearch.getInstance(), (task) -> {
 
             PlayerDataManager.tryResetTodayCollected(player);
 
-        }, null);
+        }, null, 10 * 20L);
     }
 }

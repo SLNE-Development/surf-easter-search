@@ -51,19 +51,14 @@ public final class SurfEasterSearch extends JavaPlugin {
     public void onEnable() {
         ListenerManager.INSTANCE.registerListeners();
 
-        final ZonedDateTime now = ZonedDateTime.now();
-        final ZonedDateTime nextRun = now.plusDays(1).withHour(0).withMinute(0).withSecond(0);
-        final long delay = now.until(nextRun, Tick.tick());
-
-
         getServer().getAsyncScheduler().runAtFixedRate(
                 this,
                 task -> {
                     PlayerDataManager.resetDailyLimits();
                 },
-                delay,
-                1,
-                TimeUnit.DAYS
+                5,
+                5,
+                TimeUnit.MINUTES
         );
 
         CommandManager.INSTANCE.registerCommands();
