@@ -33,7 +33,7 @@ public final class SurfEasterSearch extends JavaPlugin {
         // START_DATE = ZonedDateTime.now(); //DEBUG
 
         // Dienstag = 2 days after eastersunday
-        END_DATE = easterSunday.plusDays(3).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
+        END_DATE = easterSunday.plusDays(2).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
     }
 
     public SurfEasterSearch() {
