@@ -28,10 +28,12 @@ public final class ListenerManager {
         pm.registerEvents(WorldSaveListener.INSTANCE, plugin);
 
         if (ZonedDateTime.now().isBefore(SurfEasterSearch.START_DATE)) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            final long delayTicks = ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick());
+
+            plugin.getServer().getGlobalRegionScheduler().runDelayed(plugin, task -> {
                 pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
                 pm.registerEvents(PlayerResetDailyLimitsOnJoinListener.INSTANCE, plugin);
-            }, ZonedDateTime.now().until(SurfEasterSearch.START_DATE, Tick.tick()));
+            }, Math.max(1L, delayTicks));
         } else {
             pm.registerEvents(PlayerInteractListener.INSTANCE, plugin);
             pm.registerEvents(PlayerResetDailyLimitsOnJoinListener.INSTANCE, plugin);

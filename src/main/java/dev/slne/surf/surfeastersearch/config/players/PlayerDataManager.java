@@ -114,7 +114,8 @@ public class PlayerDataManager {
 
   public static void resetDailyLimits() {
     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-      tryResetTodayCollected(onlinePlayer);
+      onlinePlayer.getScheduler().run(SurfEasterSearch.getInstance(), task ->
+          tryResetTodayCollected(onlinePlayer), null);
     }
   }
 

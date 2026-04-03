@@ -39,6 +39,7 @@ paper {
     bootstrapper = 'dev.slne.surf.surfeastersearch.SurfEasterSearchBootstrap'
     loader = 'dev.slne.surf.surfeastersearch.SurfEasterSearchLoader'
     apiVersion = '1.21'
+    foliaSupported = true
 //    generateLibrariesJson = true
 
     authors = ['twisti']

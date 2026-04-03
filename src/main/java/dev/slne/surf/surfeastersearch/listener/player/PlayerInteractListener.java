@@ -3,7 +3,6 @@ package dev.slne.surf.surfeastersearch.listener.player;
 import dev.slne.surf.surfeastersearch.SurfEasterSearch;
 import dev.slne.surf.surfeastersearch.config.EasterConfigManager;
 import dev.slne.surf.surfeastersearch.config.items.pack.PacksConfigManager;
-import dev.slne.surf.surfeastersearch.config.players.PlayerData;
 import dev.slne.surf.surfeastersearch.config.players.PlayerDataManager;
 import dev.slne.surf.surfeastersearch.eggs.EasterEggFactory;
 import dev.slne.surf.surfeastersearch.messages.MessageBundle;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -102,8 +100,8 @@ public final class PlayerInteractListener implements Listener {
     }
 
     private void removePlayerFromProcessingList(UUID uuid) {
-        Bukkit.getScheduler()
-                .runTaskLater(SurfEasterSearch.getInstance(), () -> processingPlayers.remove(uuid), 5L);
+        SurfEasterSearch.getInstance().getServer().getGlobalRegionScheduler()
+                .runDelayed(SurfEasterSearch.getInstance(), task -> processingPlayers.remove(uuid), 5L);
     }
 
     private void collectPack(@NotNull Player player, int packId, int eggId) {
