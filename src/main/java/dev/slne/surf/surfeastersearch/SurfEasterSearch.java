@@ -29,11 +29,11 @@ public final class SurfEasterSearch extends JavaPlugin {
         ZoneId zone = ZonedDateTime.now().getZone();
 
         // Karfreitag = 2 days before eastersunday
-        START_DATE = easterSunday.minusDays(2).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
+        START_DATE = easterSunday.minusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0).withZoneSameInstant(zone);
         // START_DATE = ZonedDateTime.now(); //DEBUG
 
         // Dienstag = 2 days after eastersunday
-        END_DATE = easterSunday.plusDays(2).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
+        END_DATE = easterSunday.plusDays(3).withHour(23).withMinute(59).withSecond(59).withNano(0).withZoneSameInstant(zone);
     }
 
     public SurfEasterSearch() {
